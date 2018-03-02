@@ -5,9 +5,8 @@ function setup()
 }
 
 function draw()
-<<<<<<< HEAD
-=======
 {
-  
+  var test = 1
+  test++;
+  console.log(test)
 }
->>>>>>> 7db4e3d44afa5953d3b6debab02b980bf07c8328
