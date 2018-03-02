@@ -1,5 +1,5 @@
-can you see this?
-
-    lol
-
-hello this is not a working js
+function setup()
+{
+  createCanvas(500,500)
+  background(144,144,144)
+}
