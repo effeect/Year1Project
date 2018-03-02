@@ -1,6 +1,9 @@
+//This example uses the p5JS function
+
 var level;
 var waveform;
 
+//THE frequency of the file is being measured and shown through the wave, the ampltitude volume levels are represented in the console.
 
 function preload()
 {
@@ -25,6 +28,8 @@ function draw()
   spectrum = frequency.analyze() //This returns an array, this is required at all times
   console.log(level)
 
+  //Example used from https://p5js.org/reference/#/p5.FFT
+
   var waveform = frequency.waveform();
   noFill();
   beginShape();
@@ -45,5 +50,5 @@ function mousePressed()
 
 function mouseReleased()
 {
-  console.log("this is working")
+  console.log("Song Activated")
 }
