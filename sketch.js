@@ -44,7 +44,7 @@ function setup()
 
 
     console.log(grounds)
-    console.log(tile_frames)
+//    console.log(tile_frames)
 
     //    ground.addToGroup(grounds);
 
