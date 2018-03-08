@@ -8,9 +8,13 @@ var ground_img;
 var box;
 var box_img;
 
+var slash;
+var slash_img;
+
 //Arrays
 var grounds = [];
 var boxes = [];
+var slashes = [];
 
 
 //Key/Movement booleans
@@ -22,12 +26,13 @@ var isFalling = false;
 //Forces
 var Gravity = 0.2;
 
-
+var score = 0;
 function preload(){
 
     warrior_img = loadImage('sprites/char_sprite.png');
     ground_img = loadImage('sprites/ground_sprite.png');
     box_img = loadImage('sprites/box_sprite.png');
+    slash_img = loadImage('sprites/slash_sprite.png');
 
 }
 
@@ -88,11 +93,11 @@ function draw()
                    
                    boxes.splice(i, 1);
                    
-                   console.log(boxes[i])
+                   score += 10;
                }
         }
     
-    
+    text('Game score: ' + score, warrior.position.x-200, 100);
     //Creates new ground and boxes as character moves.
     if(isRight){
         //Framerate should be 60, but it creates them too frequently on my laptop!
@@ -152,6 +157,14 @@ function draw()
         warrior.position.y += 2;
     }
 
+   if(keyWentDown("x"))
+    {
+    slash = createSprite(warrior.position.x+15, warrior.position.y);
+    slash.addImage(slash_img);
+    slash.setSpeed(10);
+    slash.life = 30;
+    slashes.push(slash);
+    }
 }
 
 
@@ -202,3 +215,4 @@ function keyReleased(){
     }
 
 }
+
