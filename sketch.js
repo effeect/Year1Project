@@ -5,8 +5,12 @@ var warrior_img;
 var ground;
 var ground_img;
 
+var box;
+var box_img;
+
 //Arrays
 var grounds = [];
+var boxes = [];
 
 
 //Key/Movement booleans
@@ -15,11 +19,15 @@ var isRight = false;
 var isJumping = false;
 var isFalling = false;
 
+//Forces
+var Gravity = 0.2;
+
 
 function preload(){
 
     warrior_img = loadImage('sprites/char_sprite.png');
     ground_img = loadImage('sprites/ground_sprite.png');
+    box_img = loadImage('sprites/box_sprite.png');
 
 }
 
@@ -34,12 +42,19 @@ function setup()
 
     //Looping the ground to draw multiple sprites
     for(var x = 0; x < 800; x+= 120)
-    {
+    { 
+        //Ground sprites
+        
         //Prob can be mapped to sound
         var groundY = random(300, 500)
         ground = createSprite(x, groundY);
         ground.addImage(ground_img);
         grounds.push(ground)
+        
+        //Box sprites
+        box = createSprite(x+random(-20,20), groundY -28);
+        box.addImage(box_img)
+        boxes.push(box);
     }
 
 
@@ -55,7 +70,7 @@ function setup()
 function draw()
 {
     //    clear();
-    background(144,144,144)
+    background(255)
 
     
     //Looping through 'grounds' for collision, otherwise it only collides with last sprite.
@@ -63,6 +78,24 @@ function draw()
     {
         warrior.collide(grounds[i]);
     }
+    for(var i = 0; i < boxes.length; i++)
+        {
+          var collect = warrior.collide(boxes[i]);
+            if(collect)
+               {
+                  
+                   boxes[i].remove();
+                   
+                   boxes.splice(i, 1);
+                   
+                   console.log(boxes[i])
+               }
+        }
+    
+//    if(warrior.position.y <= 200)
+//        {
+//            warrior.velocity.y += Gravity;
+//        }
     //Drawing all sprites
     drawSprites();
 
