@@ -96,8 +96,11 @@ function draw()
                    score += 10;
                }
         }
-    
+    //GameScore text
     text('Game score: ' + score, warrior.position.x-200, 100);
+    text('Press X to attack!', warrior.position.x-200, 150);
+    
+    
     //Creates new ground and boxes as character moves.
     if(isRight){
         //Framerate should be 60, but it creates them too frequently on my laptop!
