@@ -33,7 +33,7 @@ function preload(){
 
 function setup()
 {
-    createCanvas(900, 500);
+    createCanvas(1200, 800);
 
 
     //Creating sprites
@@ -41,12 +41,12 @@ function setup()
     warrior.addImage(warrior_img);
 
     //Looping the ground to draw multiple sprites
-    for(var x = 0; x < 800; x+= 120)
+    for(var x = 100; x < 1100; x+= 120)
     { 
         //Ground sprites
         
         //Prob can be mapped to sound
-        var groundY = random(300, 500)
+        var groundY = random(500, 800)
         ground = createSprite(x, groundY);
         ground.addImage(ground_img);
         grounds.push(ground)
@@ -70,7 +70,7 @@ function setup()
 function draw()
 {
     //    clear();
-    background(255)
+    background(125)
 
     
     //Looping through 'grounds' for collision, otherwise it only collides with last sprite.
@@ -92,6 +92,36 @@ function draw()
                }
         }
     
+    
+    //Creates new ground and boxes as character moves.
+    if(isRight){
+        //Framerate should be 60, but it creates them too frequently on my laptop!
+    if(frameCount%120 === 0){
+        var groundY = random(500, 800)
+        ground = createSprite(warrior.position.x+width/2, groundY);
+        ground.addImage(ground_img);
+        grounds.push(ground)
+        
+        box = createSprite((warrior.position.x+width/2)+random(-20,20), groundY -28);
+        box.addImage(box_img)
+        boxes.push(box);
+        
+    }
+    }
+    
+    //Centers the camera on the character.
+    camera.position.x = warrior.position.x;
+    
+    
+    //Removes grounds and boxes from respective arrays as the out of screen on left side.
+    for(var i = 0; i<grounds.length; i++)
+      if(grounds[i].position.x < warrior.position.x-width/2)
+        grounds[i].remove();
+    for(var i = 0; i<boxes.length; i++)
+      if(boxes[i].position.x < warrior.position.x-width/2)
+        boxes[i].remove();
+    
+    
 //    if(warrior.position.y <= 200)
 //        {
 //            warrior.velocity.y += Gravity;
@@ -105,16 +135,16 @@ function draw()
     if(isRight)
     {
         warrior.mirrorX(1);
-        warrior.position.x += 1;
+        warrior.position.x += 2;
     }
     if(isLeft)
     {
         warrior.mirrorX(-1);
-        warrior.position.x -= 1;
+        warrior.position.x -= 2;
     }
     if(isJumping)
     {
-        warrior.position.y -= 1;
+        warrior.position.y -= 2;
     }
     else if(isFalling)
     {
