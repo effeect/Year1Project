@@ -11,6 +11,9 @@ var box_img;
 var slash;
 var slash_img;
 
+var enemy_knigt;
+var enemy_knight_img;
+
 //Arrays
 var grounds = [];
 var boxes = [];
@@ -24,7 +27,8 @@ var isJumping = false;
 var isFalling = false;
 
 //Forces
-var Gravity = 0.2;
+var Gravity = .3;
+var jumpValue = -5;
 
 var score = 0;
 function preload(){
@@ -33,6 +37,7 @@ function preload(){
     ground_img = loadImage('sprites/ground_sprite.png');
     box_img = loadImage('sprites/box_sprite.png');
     slash_img = loadImage('sprites/slash_sprite.png');
+    enemy_knight_img = loadImage('sprites/enemy_knight.png')
 
 }
 
@@ -60,6 +65,9 @@ function setup()
         box = createSprite(x+random(-20,20), groundY -28);
         box.addImage(box_img)
         boxes.push(box);
+        
+        enemy_knigt = createSprite(x+random(-10,10), groundY-28);
+        enemy_knigt.addImage(enemy_knight_img);
     }
 
 
@@ -152,14 +160,16 @@ function draw()
     }
     if(isJumping)
     {
-        warrior.position.y -= 2;
+        warrior.velocity.y = jumpValue;
     }
     else if(isFalling)
     {
 
-        warrior.position.y += 2;
+        warrior.velocity.y += Gravity;
     }
 
+    
+   //Creating attack sprite on X key pressed
    if(keyWentDown("x"))
     {
     slash = createSprite(warrior.position.x+15, warrior.position.y);
