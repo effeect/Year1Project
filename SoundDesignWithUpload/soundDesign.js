@@ -5,16 +5,10 @@ var waveform;
 
 //THE frequency of the file is being measured and shown through the wave, the ampltitude volume levels are represented in the console.
 
+//09/03/2018 - This version of the program is able to take any song and give results back. Please note that there are some bugs such as clicking the mouse pressed multiple times plays the song multiple times. We will fix this on the next iteration.
 //File input related functions :
-var input;
-var mp3File;
-var sound;
-
-// function preload()
-// {
-//   soundFormats('ogg','mp3')
-//   sound = loadSound("sound.mp3") //This will need to be replaced by the choice of the user
-// }
+var input; //Creates a single file input for our program
+var sound; //The sound file
 
 function setup()
 {
@@ -30,11 +24,10 @@ function setup()
 
 }
 
-function handleFile(file)
+function handleFile(file) //This function handles the audio transfer from the computer to the program and back to the computer. Note : the nature of this function means that it will take a few seconds for the sound file to become available to play through the mousePressed function
 {
   if (file.type === 'audio')
     {
-        mp3File = createAudio(file);
         console.log("it works if this displays")
         sound = loadSound(file.data)
         console.log(file)
