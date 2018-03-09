@@ -11,13 +11,14 @@ var box_img;
 var slash;
 var slash_img;
 
-var enemy_knigt;
+var enemy_knight;
 var enemy_knight_img;
 
 //Arrays
 var grounds = [];
 var boxes = [];
 var slashes = [];
+var enemies = [];
 
 
 //Key/Movement booleans
@@ -43,10 +44,35 @@ function preload(){
 
 function setup()
 {
-    createCanvas(1200, 800);
+  createCanvas(1200, 800);
+
+ Gamestart();
+}
 
 
-    //Creating sprites
+function draw()
+{
+    //    clear();
+    background(255)
+
+    Collision();
+    
+    //GameScore text
+    text('Game score: ' + score, warrior.position.x-200, 100);
+    text('Press X to attack!', warrior.position.x-200, 150);
+    
+    screenScroll();
+    
+    //Drawing all sprites
+    drawSprites();
+    charAttacks();
+    moving();
+}
+
+
+function Gamestart(){
+
+   //Creating sprites
     warrior = createSprite(width/2, height/2);
     warrior.addImage(warrior_img);
 
@@ -62,30 +88,21 @@ function setup()
         grounds.push(ground)
         
         //Box sprites
-        box = createSprite(x+random(-20,20), groundY -28);
+        box = createSprite(x-random(25,0), groundY -28, 200);
         box.addImage(box_img)
         boxes.push(box);
         
-        enemy_knigt = createSprite(x+random(-10,10), groundY-28);
-        enemy_knigt.addImage(enemy_knight_img);
+        enemy_knight = createSprite(box.position.x+45, groundY-28);
+        enemy_knight.addImage(enemy_knight_img);
+        enemies.push(enemy_knight);
     }
 
 
-    console.log(grounds)
-//    console.log(tile_frames)
-
-    //    ground.addToGroup(grounds);
 
 }
 
 
-
-function draw()
-{
-    //    clear();
-    background(125)
-
-    
+function Collision(){
     //Looping through 'grounds' for collision, otherwise it only collides with last sprite.
     for(var i = 0; i < grounds.length; i++)
     {
@@ -98,16 +115,15 @@ function draw()
                {
                   
                    boxes[i].remove();
-                   
                    boxes.splice(i, 1);
                    
                    score += 10;
                }
         }
-    //GameScore text
-    text('Game score: ' + score, warrior.position.x-200, 100);
-    text('Press X to attack!', warrior.position.x-200, 150);
     
+}
+
+function screenScroll(){
     
     //Creates new ground and boxes as character moves.
     if(isRight){
@@ -137,39 +153,10 @@ function draw()
       if(boxes[i].position.x < warrior.position.x-width/2)
         boxes[i].remove();
     
-    
-//    if(warrior.position.y <= 200)
-//        {
-//            warrior.velocity.y += Gravity;
-//        }
-    //Drawing all sprites
-    drawSprites();
+}
 
-    
-    
-    //Moving logics and mirroring warrior sprite so we only use 1 sprite for now.
-    if(isRight)
-    {
-        warrior.mirrorX(1);
-        warrior.position.x += 2;
-    }
-    if(isLeft)
-    {
-        warrior.mirrorX(-1);
-        warrior.position.x -= 2;
-    }
-    if(isJumping)
-    {
-        warrior.velocity.y = jumpValue;
-    }
-    else if(isFalling)
-    {
-
-        warrior.velocity.y += Gravity;
-    }
-
-    
-   //Creating attack sprite on X key pressed
+function charAttacks(){
+    //Creating attack sprite on X key pressed
    if(keyWentDown("x"))
     {
     slash = createSprite(warrior.position.x+15, warrior.position.y);
@@ -178,22 +165,9 @@ function draw()
     slash.life = 30;
     slashes.push(slash);
     }
+    
 }
 
-
-function Character(){
-
-    //Front Standing
-
-
-    //Left Standing
-
-
-    //Right standing
-
-
-
-}
 
 function keyPressed(){
     if(key == 'D')
@@ -229,3 +203,26 @@ function keyReleased(){
 
 }
 
+function moving(){
+    //Moving logics and mirroring warrior sprite so we only use 1 sprite for now.
+    if(isRight)
+    {
+        warrior.mirrorX(1);
+        warrior.position.x += 2;
+    }
+    if(isLeft)
+    {
+        warrior.mirrorX(-1);
+        warrior.position.x -= 2;
+    }
+    if(isJumping)
+    {
+        warrior.velocity.y = jumpValue;
+    }
+    else if(isFalling)
+    {
+
+        warrior.velocity.y += Gravity;
+    }
+    
+}
