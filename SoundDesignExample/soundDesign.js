@@ -5,13 +5,19 @@ var waveform;
 
 //THE frequency of the file is being measured and shown through the wave, the ampltitude volume levels are represented in the console.
 
+//File input related functions :
+var input;
+var mp3File;
+
 function preload()
 {
+  soundFormats('ogg','mp3')
   sound = loadSound("sound.mp3") //This will need to be replaced by the choice of the user
 }
 
 function setup()
 {
+
   createCanvas(500,400);
   amplitude = new p5.Amplitude(); //Creates a new ampltitude function in the p5.sound file
 
@@ -19,6 +25,18 @@ function setup()
   amplitude.setInput(sound) //Entering in the variable
   frequency.setInput(sound) //Entering in the variable into
 
+
+  input = createFileInput(handleFile) //Handle File refers to a function, the createFileInput function is a p5js Dom function
+
+}
+
+function handleFile(file)
+{
+  if (file.type === 'audio')
+    {
+        mp3File = createAudio(file);
+        console.log("it works if this displays")
+    }
 }
 
 function draw()

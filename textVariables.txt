@@ -1,0 +1,1 @@
+Text file contains the list of variables for both sound and game elements. All of the variables have comments listed.
