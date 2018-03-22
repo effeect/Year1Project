@@ -1,7 +1,7 @@
 //This example uses the p5JS function
 
-var level;
-var waveform;
+var level; //Amplitude level of the program, global variable
+var waveform; //Frequency values of the song, global variable
 
 //THE frequency of the file is being measured and shown through the wave, the ampltitude volume levels are represented in the console.
 
@@ -39,12 +39,13 @@ function draw()
   background(0)
   level = amplitude.getLevel() //gets the level of the ampltitude real time, it's between 1 and 0
   spectrum = frequency.analyze() //This returns an array, this is required at all times
-  console.log(level)
-  console.log(spectrum)
+  console.log("Amp : " +level)
+  
 
   //Example used from https://p5js.org/reference/#/p5.FFT
 
   var waveform = frequency.waveform();
+    console.log("Frequency : " +waveform)
   noFill();
   beginShape();
   stroke(255,0,0); // waveform is red
@@ -57,12 +58,7 @@ function draw()
   endShape();
 }
 
-function mousePressed()
+function mousePressed() //This function handles the play function of the program, this will be modified for the final version of the program.
 {
   sound.play()
 }
-
-// function mouseReleased()
-// {
-//   console.log("Song Activated")
-// }
