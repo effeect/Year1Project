@@ -11,14 +11,25 @@ var realPos;
 var char;
 
 var ground;
+var obstacle = [];
 function setup() {
     createCanvas(710, 400);
     w = width+16;
     dx = (TWO_PI / period) * xspacing;
     yvalues = new Array(floor(w/xspacing));
 
+    //Creating new Character and the ground
     char = new Char();
     ground = new Ground();
+    
+    //Creating 10 starting obstacles. Width and height made to be maped.
+    for(var i = 0; i < 10; i++){
+        var x = 30 + random(30, 80) * 10;
+        var d_x = random(15, 25);
+        var d_y = random(-20, -30);
+        obstacle.push(new Obstacle(x, d_x, d_y));
+    }
+    
 
     // Variable to control the background scrolling.
     scrollPos = 0;
@@ -35,22 +46,24 @@ function draw() {
     //  renderWave();
 
     
-    
+    //Drawing and moving Character
     char.draw();
     char.move();
     
 
+    //Drawing ground
     ground.draw();
-
-    //    if(char.x > width * 0.2)
-    //        {
-    //            char.x -= 2;
-    //        }
-    //        else
-    //        {
-    //            scrollPos += 2;
-    //        }
-
+    
+    //Looping through obstacle array to draw obstacles.
+    for(var i = 0; i < obstacle.length; i++)
+        {
+    obstacle[i].draw();
+            if(obstacle[i].x < char.x-10)
+                {
+                    obstacle.splice(obstacle[i],0,1);
+                }
+        }
+    
     
 }
 
@@ -90,6 +103,20 @@ function Ground(){
     }
 }
 
+function Obstacle(x, delta_x, delta_y){
+    
+    this.x = x;
+    this.y = 300;
+    this.delta_x = delta_x;
+    this.delta_y = delta_y;
+    
+    this.draw = function(){
+         push()
+    translate(scrollPos * 1.2, 0);
+        rect(this.x, this.y, this.delta_x, this.delta_y);
+        pop();
+    }
+}
 
 function keyPressed(){
     if(key == 'D')
