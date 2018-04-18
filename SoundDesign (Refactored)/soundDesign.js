@@ -3,7 +3,7 @@
 var level; //Amplitude level of the program, global variable
 var waveform; //Frequency values of the song, global variable
 
-//THE frequency of the file is being measured and shown through the wave, the ampltitude volume levels are represented in the console.
+//THE frequency of the file is being measured and shown through the wave, the amplitude volume levels are represented in the console.
 
 //File input related functions :
 var input; //Creates a single file input for our program
@@ -22,11 +22,15 @@ var midMapped;
 var highMidMapped;
 var trebleMapped;
 
-function setup()
+//Global Variables :
+var amplitude;
+var frequency;
+
+function setupSound()
 {
 
   createCanvas(500,400);
-  amplitude = new p5.Amplitude(); //Creates a new ampltitude function in the p5.sound file
+  amplitude = new p5.Amplitude(); //Creates a new amplitude function in the p5.sound file
   frequency = new p5.FFT() //This one measures the frequency of the sound
   amplitude.setInput(sound) //Entering in the variable
   frequency.setInput(sound) //Entering in the variable into
@@ -51,10 +55,9 @@ function mapping(variable)
   return stor;
 }
 
-function draw()
+function soundDraw()
 {
-  background(0)
-  level = amplitude.getLevel() //gets the level of the ampltitude real time, it's between 1 and 0
+  level = amplitude.getLevel() //gets the level of the amplitude real time, it's between 1 and 0
   spectrum = frequency.analyze() //This returns an array, this is required at all times
 
   //List of returned frequencies-------------------------
@@ -72,33 +75,6 @@ function draw()
   trebleMapped = map(treble,0,255,0,100)
 
   console.log(bassMapped)
-
-
-  //Example used from https://p5js.org/reference/#/p5.FFT
-
-  var waveform = frequency.waveform();
-  noFill();
-  beginShape();
-  stroke(255)
-  strokeWeight(1);
-  for (var i = 0; i< waveform.length; i++){
-    var x = map(i, 0, waveform.length, 0, width);
-    var y = map( waveform[i], -1, 1, 0, height);
-    vertex(x,y);
-  }
-  endShape();
-
-  //Example used from https://p5js.org/reference/#/p5.FFT
-  noStroke();
-  fill(0,255,0); // spectrum is green
-  for (var i = 0; i< spectrum.length; i++)
-  {
-  var x = map(i, 0, spectrum.length, 0, width);
-  var h = -height + map(spectrum[i], 0, 255, height, 0);
-  rect(x, height, width / spectrum.length, h )
-  }
-
-
 }
 
 function mousePressed() //This function handles the play function of the program, this will be modified for the final version of the program.
