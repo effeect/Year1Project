@@ -15,16 +15,15 @@ var lowMid;
 var mid;
 var highMid;
 var treble;
-//The frequencies mapped between 0 and 100 instead of 0 to 255
-var bassMapped;
-var lowMidMapped;
-var midMapped;
-var highMidMapped;
-var trebleMapped;
 
 //Global Variables :
 var amplitude;
 var frequency;
+
+//Booleans
+var onOff = true; //On off switch for the program
+var soundRecieved = false;
+
 
 function setupSound()
 {
@@ -43,8 +42,9 @@ function handleFile(file) //This function handles the audio transfer from the co
 {
   if (file.type === 'audio')
     {
-        console.log("it works if this displays")
+        console.log("File recieved")
         sound = loadSound(file.data)
+        soundRecieved = true;
         console.log(file)
     }
 }
@@ -74,10 +74,19 @@ function soundDraw()
   highMidMapped = map(highMid,0,255,0,100)
   trebleMapped = map(treble,0,255,0,100)
 
-  console.log(bassMapped)
+
+  if(soundRecieved)
+  {
+    playMusic()
+  }
 }
 
-function mousePressed() //This function handles the play function of the program, this will be modified for the final version of the program.
+function playMusic()
 {
-  sound.play()
+  var soundLoad = sound.isLoaded()
+  if(soundLoad)
+  {
+    sound.play()
+    soundRecieved = false;
+  }
 }

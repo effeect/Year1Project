@@ -7,16 +7,17 @@ var midMapped;
 var highMidMapped;
 var trebleMapped;
 
-
 function setup()
 {
   setupSound() //This is the setup function inside the soundDesign.js function.
 
-  createCanvas(1920,1080)
+  createCanvas(innerWidth,innerHeight) //Sets the canvas to stretch the screen
 }
 
 function draw()
 {
+
   soundDraw() //This is the draw function inside the soundDesign.js function.
-  background(bassMapped,trebleMapped,midMapped)
+  background(bassMapped,0,0)
+  ellipse(500,500,bassMapped * 4, bassMapped * 4)
 }
