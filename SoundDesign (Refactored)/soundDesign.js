@@ -23,12 +23,13 @@ var frequency;
 //Booleans
 var onOff = true; //On off switch for the program
 var soundRecieved = false;
+var isPlaying;
 
 
 function setupSound()
 {
 
-  createCanvas(500,400);
+  createCanvas(400,400);
   amplitude = new p5.Amplitude(); //Creates a new amplitude function in the p5.sound file
   frequency = new p5.FFT() //This one measures the frequency of the sound
   amplitude.setInput(sound) //Entering in the variable
@@ -36,6 +37,7 @@ function setupSound()
 
   input = createFileInput(handleFile) //Handle File refers to a function, the createFileInput function is a p5js Dom function
 
+    isPlaying = false;
 }
 
 function handleFile(file) //This function handles the audio transfer from the computer to the program and back to the computer. Note : the nature of this function means that it will take a few seconds for the sound file to become available to play through the mousePressed function
@@ -88,5 +90,6 @@ function playMusic()
   {
     sound.play()
     soundRecieved = false;
+      isPlaying = true;
   }
 }
