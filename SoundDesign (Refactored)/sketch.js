@@ -18,7 +18,7 @@ var coins;
 var platforms;
 var gameOver;
 var warriorImg, groundImg, coinImg;
-var score;
+var score = 0;
 
 function setup()
 {
@@ -132,7 +132,7 @@ function draw()
         
     
     
-    text('Game score: ' + score, warrior.position.x +200, 100);
+   
     //Centering camera position
     camera.position.x = warrior.position.x + width/4;
    
@@ -153,6 +153,7 @@ function draw()
     image(backgroundImg, 0, GROUND_Y-height);
     camera.on();
     
+     text('Game score: ' + score, warrior.position.x +200, 100);
     //Drawing sprites
     drawSprites(coins);
     drawSprite(ground);
