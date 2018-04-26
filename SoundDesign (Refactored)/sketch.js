@@ -15,6 +15,7 @@ var GROUND_Y;
 var MIN_OPENING = 300;
 var warrior, ground;
 var coins;
+var platforms;
 var gameOver;
 var warriorImg, groundImg, coinImg;
 var score;
@@ -31,14 +32,15 @@ function setup()
     groundImg = loadImage("sprites/pix_ground.png");
     coinImg = loadImage("sprites/coin_sprite.png");
     backgroundImg = loadImage("sprites/test1_bg.png");
+    platformImg = loadImage("sprites/float_ground.png");
     
     GROUND_Y = height - 100;
     
     //Creating warrior sprite
-    warrior = createSprite(width/2, GROUND_Y -130, 40,40);
+    warrior = createSprite(width/2, GROUND_Y -130,10,10);
 //    warrior.rotateToDirection = true;
-    warrior.velocity.x = 2;
-    warrior.setCollider("circle", 0,0,20);
+    warrior.velocity.x = 3;
+    warrior.setCollider("circle");
     warrior.addImage(warriorImg);
 
     
@@ -53,6 +55,7 @@ function setup()
 
     coins = new Group();
     grounds = new Group();
+    platforms = new Group();
     gameOver = true;
     updateSprites(false);
 
@@ -97,9 +100,19 @@ function draw()
         
         //The Y position is mapped for the bass for now
             var groundH = random(20, 160);
-            var coin = createSprite(warrior.position.x+width/2, lowMidMapped*random(3, 5), 80, groundH);
+            var coin = createSprite(warrior.position.x+width/2, lowMidMapped, 80, groundH);
             coin.addImage(coinImg);
             coins.push(coin)
+        
+        //Creating platforms under some of the coins
+                
+        var platform = createSprite(warrior.position.x+width/2+random(200,400), lowMidMapped*random(3,5)+50, 100, 40);
+        platform.addImage(platformImg);
+        platform.setCollider('rectangle');
+        platforms.push(platform);
+        
+//            console.log(platform)
+        }
     }
         
         //Collecting the coins
@@ -109,12 +122,16 @@ function draw()
         if(collect){
             coins[i].remove();
             coins.splice(i, 1);
-
             score += 10;
-
         }
     }
-    }
+    
+    //Platform collision
+    
+       warrior.collide(platforms);
+        
+    
+    
     text('Game score: ' + score, warrior.position.x +200, 100);
     //Centering camera position
     camera.position.x = warrior.position.x + width/4;
@@ -141,6 +158,7 @@ function draw()
     drawSprite(ground);
     drawSprite(warrior);
     drawSprites(grounds);
+    drawSprites(platforms);
 }
 
 function newGame() {
