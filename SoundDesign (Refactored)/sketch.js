@@ -23,7 +23,7 @@ function setup()
 {
     setupSound() //This is the setup function inside the soundDesign.js function.
 
-    createCanvas(800,600) //Sets the canvas to stretch the screen
+    createCanvas(innerWidth,innerHeight) //Sets the canvas to stretch the screen
 
     
     //Preloading images for sprites
@@ -32,7 +32,7 @@ function setup()
     coinImg = loadImage("sprites/coin_sprite.png");
     backgroundImg = loadImage("sprites/test1_bg.png");
     
-    GROUND_Y = height - 200;
+    GROUND_Y = height - 100;
     
     //Creating warrior sprite
     warrior = createSprite(width/2, GROUND_Y -130, 40,40);
@@ -41,13 +41,18 @@ function setup()
     warrior.setCollider("circle", 0,0,20);
     warrior.addImage(warriorImg);
 
+    
     //Creating ground sprite
-    ground = createSprite(800/2, GROUND_Y); //image 800x200
+//    for(var i = 0; i < width/100; i+= 100){
+    ground = createSprite(width/2, GROUND_Y); //image 800x200
     ground.addImage(groundImg);
-    ground.scale = 0.5
-    ground.width = 100;
+//    ground.scale = 0.5
+    ground.width = width/4+115;
+//    grounds.push(ground)
+//    }
 
     coins = new Group();
+    grounds = new Group();
     gameOver = true;
     updateSprites(false);
 
@@ -92,7 +97,7 @@ function draw()
         
         //The Y position is mapped for the bass for now
             var groundH = random(20, 160);
-            var coin = createSprite(warrior.position.x+width/2, bassMapped, 80, groundH);
+            var coin = createSprite(warrior.position.x+width/2, lowMidMapped*random(3, 5), 80, groundH);
             coin.addImage(coinImg);
             coins.push(coin)
     }
@@ -118,6 +123,9 @@ function draw()
    
     //Wrapping ground
     if(camera.position.x > ground.position.x-ground.width+width/2){
+//        var ground_new = createSprite(ground.position.x+width/2, GROUND_Y);
+//        ground_new.addImage(groundImg);
+//        grounds.push(ground_new);
         ground.position.x+=ground.width;
         
     }
@@ -125,13 +133,14 @@ function draw()
     //Drawing background and background Image aswell
     background(200); 
     camera.off();
-    image(backgroundImg, 0, GROUND_Y-290);
+    image(backgroundImg, 0, GROUND_Y-height);
     camera.on();
     
     //Drawing sprites
     drawSprites(coins);
     drawSprite(ground);
     drawSprite(warrior);
+    drawSprites(grounds);
 }
 
 function newGame() {
@@ -141,7 +150,7 @@ function newGame() {
   warrior.position.x = width/2;
   warrior.position.y = GROUND_Y - 130;
   warrior.velocity.y = 0;
-  ground.position.x = 800/2;
+  ground.position.x = width/2;
   ground.position.y = GROUND_Y;
 }
 
