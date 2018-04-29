@@ -15,10 +15,11 @@ var GROUND_Y;
 var MIN_OPENING = 300;
 var warrior, ground;
 var coins;
-var platforms;
+var platforms, enemies, shrooms;
 var gameOver;
 var warriorImg, groundImg, coinImg;
 var score = 0;
+var enemy_smallImg, shroomImg;
 
 function setup()
 {
@@ -33,6 +34,8 @@ function setup()
     coinImg = loadImage("sprites/coin_sprite.png");
     backgroundImg = loadImage("sprites/test1_bg.png");
     platformImg = loadImage("sprites/platform_sprite.png");
+    enemy_smallImg = loadImage("sprites/enemy_sprite.png");
+    shroomImg = loadImage("sprites/shroom_sprite.png");
     
     GROUND_Y = height - 100;
     
@@ -56,6 +59,8 @@ function setup()
     coins = new Group();
     grounds = new Group();
     platforms = new Group();
+    enemies = new Group();
+    shrooms = new Group();
     gameOver = true;
     updateSprites(false);
 
@@ -106,11 +111,22 @@ function draw()
         
         //Creating platforms under some of the coins
                 
-        var platform = createSprite(warrior.position.x+width/2+random(200,400), lowMidMapped*random(3,5)+50, 100, 40);
+        var platform = createSprite(warrior.position.x+width/2+random(200,400)*random(2,4), lowMidMapped*random(3,5)+50, 100, 40);
         platform.addImage(platformImg);
 //        platform.setCollider('rectangle');
         platforms.push(platform);
         
+        //Creating shrooms from camera position so its not tied to the character
+        var shroomH = random(20, 80);
+        var shroom = createSprite(camera.position.x+width/2+random(200, 400), GROUND_Y-130, 50, shroomH);
+        shroom.addImage(shroomImg);
+        shrooms.push(shroom);
+        
+        //Creating small enemies between the shrooms with a basic velocity 1;
+        var small_enemy = createSprite(shroom.position.x+random(40, 50), GROUND_Y-110);
+        small_enemy.addImage(enemy_smallImg);
+        small_enemy.velocity.x = 1;
+        enemies.push(small_enemy);
 //            console.log(platform)
         }
     }
@@ -130,6 +146,16 @@ function draw()
     
        warrior.collide(platforms);
         
+    //Enemies movement
+    //Between two shrooms. If they collide the speed changes by *-1;
+    for(var i = 0; i < enemies.length; i++){
+        for(var j = 0; j < shrooms.length; j++){
+            if(enemies[i].collide(shrooms[j])){
+            enemies[i].velocity.x *= -1;
+        }
+        }
+        
+    }
     
     
    
@@ -160,6 +186,8 @@ function draw()
     drawSprite(warrior);
     drawSprites(grounds);
     drawSprites(platforms);
+    drawSprites(enemies);
+    drawSprites(shrooms);
 }
 
 function newGame() {
