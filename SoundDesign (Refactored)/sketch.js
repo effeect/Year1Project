@@ -32,7 +32,7 @@ function setup()
     groundImg = loadImage("sprites/pix_ground.png");
     coinImg = loadImage("sprites/coin_sprite.png");
     backgroundImg = loadImage("sprites/test1_bg.png");
-    platformImg = loadImage("sprites/float_ground.png");
+    platformImg = loadImage("sprites/platform_sprite.png");
     
     GROUND_Y = height - 100;
     
@@ -40,7 +40,7 @@ function setup()
     warrior = createSprite(width/2, GROUND_Y -130,10,10);
 //    warrior.rotateToDirection = true;
     warrior.velocity.x = 3;
-    warrior.setCollider("circle");
+//    warrior.setCollider("circle");
     warrior.addImage(warriorImg);
 
     
@@ -108,7 +108,7 @@ function draw()
                 
         var platform = createSprite(warrior.position.x+width/2+random(200,400), lowMidMapped*random(3,5)+50, 100, 40);
         platform.addImage(platformImg);
-        platform.setCollider('rectangle');
+//        platform.setCollider('rectangle');
         platforms.push(platform);
         
 //            console.log(platform)
