@@ -15,8 +15,8 @@ function setup() {
   x = 0;
    pg.phase = 0;
     pg2.phase = 3;
-    
-  amplitude = new p5.Amplitude();
+
+    amplitude = new p5.Amplitude();
     amplitude.setInput(sound);
     sound.play();
 }
@@ -25,10 +25,10 @@ function draw() {
   background(0);
 
     level = amplitude.getLevel();
-if (keyIsPressed) moveQuad();
-    
+    if (keyIsPressed) moveQuad();
+
   //applying offscreen renderer (DO NOT MOVE!)
-  
+
 //  quad(-153.5, 63.5, 324.5, 144, 315.5, -158, -145.5, -250); //Clockwise method seemed to make everything go upside down for some reason. Reflection is cool tho.
      texture(pg);
     animation1()
@@ -75,7 +75,7 @@ function animation2(){
         var tempHeight = (pg2.height / totalSquares) * i;
         pg2.fill(0,50,100);
         pg2.stroke(360, 100, 100);
-        
+
         pg2.rect(0, 0, tempWidth, tempHeight);
         pg2.fill(180, 100, 100);
         pg2.rect(0, 0, tempWidth - sw, tempHeight - sw);
