@@ -26,17 +26,6 @@ function setup()
   frequency.setInput(sound) //Entering in the variable into
 
 
-  input = createFileInput(handleFile) //Handle File refers to a function, the createFileInput function is a p5js Dom function
-
-}
-
-function handleFile(file)
-{
-  if (file.type === 'audio')
-    {
-        mp3File = createAudio(file);
-        console.log("it works if this displays")
-    }
 }
 
 function draw()
