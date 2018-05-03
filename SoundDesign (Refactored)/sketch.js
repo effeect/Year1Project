@@ -88,7 +88,8 @@ function draw()
     if(!gameOver) {
 
         if(keyWentDown("x"))
-            warrior.velocity.y = FLAP;    
+            warrior.velocity.y = FLAP;
+        //           
 
         warrior.velocity.y += GRAVITY;
 
@@ -98,8 +99,12 @@ function draw()
             warrior.position.y = 0;
         }
 
-        warrior.collide(ground)
-        
+//        warrior.collide(ground)
+        //To keep him on the ground. A kind of collision detection.
+        if(warrior.position.y+warrior.height/2 > GROUND_Y-130){
+            warrior.position.y = GROUND_Y - 125;
+        }
+        //
     }
 
 
