@@ -22,7 +22,7 @@ var score = 0;
 var enemy_smallImg, shroomImg;
 
 var lifePoints;
-
+var damaged;
 
 function setup()
 {
@@ -36,7 +36,7 @@ function setup()
     warriorImg = loadImage("sprites/char_sprite.png");
     groundImg = loadImage("sprites/pix_ground.png");
     coinImg = loadImage("sprites/coin_sprite.png");
-    backgroundImg = loadImage("sprites/test1_bg.png");
+    backgroundImg = loadImage("sprites/background_img.png");
     platformImg = loadImage("sprites/platform_sprite.png");
     enemy_smallImg = loadImage("sprites/enemy_sprite.png");
     shroomImg = loadImage("sprites/shroom_sprite.png");
@@ -68,6 +68,7 @@ function setup()
     enemies = new Group();
     shrooms = new Group();
 
+    damaged = false;
     gameOver = true;
     updateSprites(false);
 
@@ -163,6 +164,8 @@ function draw()
     //    warrior.collide(shrooms);
 
     //Warrior and enemy collision + life lost
+    warrior.overlap(enemies, lifeDamage);
+    
     //    for(var i = 0; i < enemies.length; i++){
     //        var damage = warrior.collide(enemies[i]);
     //        if(damage){
@@ -196,7 +199,7 @@ function draw()
     //Drawing background and background Image aswell
     background(200); 
     camera.off();
-    image(backgroundImg, 0, GROUND_Y-height);
+    image(backgroundImg, 0, GROUND_Y-height, width, height-100);
     camera.on();
 
     //Game score and life points
@@ -216,7 +219,23 @@ function collect(collector, collected){
 }
 
 function lifeDamage(character, enemy){
+    //Life damage system
+    //If the character overlaps with an enemy and not wounded/damaged -10 points and becomes damaged.
+    
+    if(damaged == false){
     lifePoints -= 10;
+    damaged = true;
+    }
+    
+    //If damaged life stays same so the draw loop wont decrement infinitely.
+    if(damaged == true){
+        lifePoints = lifePoints;
+    }
+    
+    //FrameCount seems the only way to time something. So after certain frameCount damaged status refereshed.
+    if(frameCount%60 == 0){
+        damaged = false;
+    }
     
 }
 function dead(){
