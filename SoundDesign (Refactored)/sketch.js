@@ -215,6 +215,10 @@ function collect(collector, collected){
     score += 10;
 }
 
+function lifeDamage(character, enemy){
+    lifePoints -= 10;
+    
+}
 function dead(){
     updateSprites(false);
     gameOver = true;
