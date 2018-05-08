@@ -15,14 +15,15 @@ var GROUND_Y;
 var MIN_OPENING = 300;
 var warrior, ground;
 var coins;
-var platforms, enemies, shrooms;
+var platforms, enemies, shrooms, grounds;
 var gameOver;
-var warriorImg, groundImg, coinImg;
+var warriorImg, groundImg, ground_secondImg, coinImg, holeImg;
 var score = 0;
 var enemy_smallImg, shroomImg;
 
 var lifePoints;
 var damaged;
+
 
 function setup()
 {
@@ -35,17 +36,20 @@ function setup()
     //Preloading images for sprites
     warriorImg = loadImage("sprites/char_sprite.png");
     groundImg = loadImage("sprites/pix_ground.png");
+    ground_secondImg = loadImage("sprites/pixil-frame-0.png")
     coinImg = loadImage("sprites/coin_sprite.png");
     backgroundImg = loadImage("sprites/background_img.png");
     platformImg = loadImage("sprites/platform_sprite.png");
     enemy_smallImg = loadImage("sprites/enemy_sprite.png");
     shroomImg = loadImage("sprites/shroom_sprite.png");
+    holeImg = loadImage("sprites/hole_img.png");
+    hole_second_Img = loadImage("sprites/hole_img_two.png");
 
     GROUND_Y = height - 100;
 
     //Creating warrior sprite
     warrior = createSprite(width/2, GROUND_Y -130, 47, 55);
-    warrior.velocity.x = 3;
+    
     warrior.setCollider("rectangle");
     warrior.addImage(warriorImg);
     warrior.debug = true;
@@ -57,7 +61,7 @@ function setup()
     ground.width = width/4+115;
     ground.setCollider("rectangle", 0, 0, 2600, 200)
     ground.debug = true;
-    
+
 
     lifePoints = 50;
 
@@ -67,6 +71,8 @@ function setup()
     platforms = new Group();
     enemies = new Group();
     shrooms = new Group();
+    holes = new Group();
+    grounds = new Group();
 
     damaged = false;
     gameOver = true;
@@ -83,7 +89,7 @@ function draw()
     //    ellipse(500,500,bassMapped * 4, bassMapped * 4)
 
     //If gameover and music playing
-    if(gameOver)
+    if(gameOver && isPlaying)
         newGame();
 
     if(!gameOver) {
@@ -94,24 +100,23 @@ function draw()
 
         warrior.velocity.y += GRAVITY;
 
-
-
         if(warrior.position.y<0){
             warrior.position.y = 0;
         }
-
-//        warrior.collide(ground)
-        //To keep him on the ground. A kind of collision detection.
-        if(warrior.position.y+warrior.height/2 > GROUND_Y-130){
-            warrior.position.y = GROUND_Y - 125;
+        
+        if(warrior.position.y > height){
+            dead();
         }
-        //
+
+                warrior.collide(ground)
+        
     }
 
 
     //Only draws coins if the music is playing
     if(isPlaying){
 
+        
         //Framecount needed to space them out evenly. For now
         if(frameCount%60 == 0){
 
@@ -121,33 +126,29 @@ function draw()
             coin.addImage(coinImg);
             coin.setCollider("circle");
             coin.debug = true;
-            coins.push(coin)
-
-            //Creating platforms under some of the coins
-
-            var platform = createSprite(warrior.position.x+width/2+random(200,400)*random(2,4), lowMidMapped*random(3,5)+50, 99, 23);
-            platform.addImage(platformImg);
-            platform.debug = true;
-            platform.setCollider("rectangle");
-            platforms.push(platform);
-
-            //Creating shrooms from camera position so its not tied to the character
-            var shroomH = random(20, 80);
-            var shroom = createSprite(camera.position.x+width/2+random(200, 400), GROUND_Y-130, 50, 60);
-            shroom.setCollider("circle")
-            shroom.addImage(shroomImg);
-            shroom.debug = true;
-            shrooms.push(shroom);
-
-            //Creating small enemies between the shrooms with a basic velocity 1;
-            var small_enemy = createSprite(shroom.position.x+random(40, 50), GROUND_Y-110, 50, 50);
-            small_enemy.addImage(enemy_smallImg);
-            small_enemy.velocity.x = 1;
-            small_enemy.setCollider("circle", 0, 0, 20, 20)
-            small_enemy.debug = true;
-            enemies.push(small_enemy);
-            //            console.log(platform)
+            coins.push(coin);
+//            console.log(midMapped)
+            
+        
+            
+      if(midMapped < 50){
+          
+          groundLevel();
+          
+          
+          
+      }
+      else if(midMapped > 50){
+          
+          
+            holeLevel();
+            drawHole();
+        
+          
+      }
         }
+        
+    
     }
 
     //Collecting the coins
@@ -165,41 +166,31 @@ function draw()
 
     //Warrior and enemy collision + life lost
     warrior.overlap(enemies, lifeDamage);
-    
-    //    for(var i = 0; i < enemies.length; i++){
-    //        var damage = warrior.collide(enemies[i]);
-    //        if(damage){
-    //            lifePoints = lifePoints - 10;
-    //        }
-    //    }
-    //
-    //    if(lifePoints == 0){
-    //        dead();
-    //    }
 
+    warrior.collide(grounds);
     //Enemies movement
     //Between two shrooms. If they collide the speed changes by *-1;
-        for(var i = 0; i < enemies.length; i++){
-            for(var j = 0; j < shrooms.length; j++){
-                if(enemies[i].collide(shrooms[j])){
-                    enemies[i].velocity.x *= -1;
-                }
-            }  
-        }
+    for(var i = 0; i < enemies.length; i++){
+        for(var j = 0; j < shrooms.length; j++){
+            if(enemies[i].collide(shrooms[j])){
+                enemies[i].velocity.x *= -1;
+            }
+        }  
+    }
 
 
     //Centering camera position
     camera.position.x = warrior.position.x + width/4;
 
     //Wrapping ground
-    if(camera.position.x > ground.position.x-ground.width+width/2){
-        ground.position.x+=ground.width;
-    }
+//    if(camera.position.x > ground.position.x-ground.width+width/2){
+//        ground.position.x+=ground.width;
+//    }
 
     //Drawing background and background Image aswell
     background(200); 
     camera.off();
-    image(backgroundImg, 0, GROUND_Y-height, width, height-100);
+    image(backgroundImg, 0, GROUND_Y-(height-100), width, height-100);
     camera.on();
 
     //Game score and life points
@@ -213,6 +204,78 @@ function draw()
     drawingSprites();
 }
 
+function groundLevel(){
+
+    var ground_second = createSprite(camera.position.x+width/2, GROUND_Y, 100, 200);
+    var ground_second_plus = createSprite(ground_second.position.x+100, GROUND_Y, 100, 200);
+    ground_second.addImage(ground_secondImg);
+    ground_second_plus.addImage(ground_secondImg);
+    ground_second.setCollider("rectangle");
+    ground_second_plus.setCollider("rectangle");
+    ground_second.debug = true;
+    ground_second_plus.debug = true;
+    grounds.push(ground_second);
+    grounds.push(ground_second_plus);
+    
+    var shroom = createSprite(camera.position.x+width/2+random(50, 150), GROUND_Y-130, 50, 60);
+    shroom.setCollider("circle")
+    shroom.addImage(shroomImg);
+    shroom.debug = true;
+    shrooms.push(shroom);
+
+    var small_enemy = createSprite(shroom.position.x+random(40, 50), GROUND_Y-110, 50, 50);
+    small_enemy.addImage(enemy_smallImg);
+    small_enemy.velocity.x = 1;
+    small_enemy.setCollider("circle", 0, 0, 20, 20)
+    small_enemy.debug = true;
+    enemies.push(small_enemy);
+}
+
+function groundRemove(){
+    for(var i = 0; i < grounds.length; i++){
+              if(grounds[i].position.x < warrior.position.x-width/2){
+                  grounds[i].remove();
+              }
+          }
+    
+    for(var j = 0; j < shrooms.length; j++){
+       if(shrooms[j].position.x < warrior.position.x-width/2){
+                  shrooms[j].remove();
+              }
+    }
+    
+    for(var k = 0; k < enemies.length; k++){
+       if(enemies[k].position.x < warrior.position.x-width/2){
+                  enemies[k].remove();
+              }
+    }
+}
+function drawHole(){
+    var hole = createSprite(camera.position.x+width/2, GROUND_Y, 100, 200);
+    var hole_second = createSprite(hole.position.x +100, GROUND_Y, 100, 200);
+    hole.addImage(holeImg);
+    hole_second.addImage(holeImg);
+    hole.setCollider("rectangle");
+    hole_second.setCollider("rectangle");
+    hole.debug = true;
+    hole_second.debug = true;
+    holes.push(hole);
+    holes.push(hole_second);
+    
+}
+
+
+function holeLevel(){
+    
+    
+    var platform = createSprite(camera.position.x+width/2, lowMidMapped*random(3,5)+50, 99, 23);
+    platform.addImage(platformImg);
+    platform.debug = true;
+    platform.setCollider("rectangle");
+    platforms.push(platform);
+    
+}
+
 function collect(collector, collected){
     collected.remove();
     score += 10;
@@ -221,36 +284,39 @@ function collect(collector, collected){
 function lifeDamage(character, enemy){
     //Life damage system
     //If the character overlaps with an enemy and not wounded/damaged -10 points and becomes damaged.
-    
+
     if(damaged == false){
-    lifePoints -= 10;
-    damaged = true;
+        lifePoints -= 10;
+        damaged = true;
     }
-    
+
     //If damaged life stays same so the draw loop wont decrement infinitely.
     if(damaged == true){
         lifePoints = lifePoints;
     }
-    
+
     //FrameCount seems the only way to time something. So after certain frameCount damaged status refereshed.
     if(frameCount%60 == 0){
         damaged = false;
     }
-    
+
 }
 function dead(){
     updateSprites(false);
     gameOver = true;
+    isPlaying = false;
 }
 function drawingSprites(){
 
     drawSprites(coins);
     drawSprite(ground);
     drawSprite(warrior);
-    drawSprites(grounds);
+    
     drawSprites(platforms);
     drawSprites(enemies);
     drawSprites(shrooms);
+    drawSprites(holes);
+    drawSprites(grounds);
 
 }
 
@@ -261,12 +327,13 @@ function newGame() {
     warrior.position.x = width/2;
     warrior.position.y = GROUND_Y - 130;
     warrior.velocity.y = 0;
+    warrior.velocity.x = 3;
     ground.position.x = width/2;
     ground.position.y = GROUND_Y;
 }
 
 function mousePressed() {
-    if(gameOver)
-        newGame();
+//    if(gameOver)
+//        newGame();
     //      warrior.velocity.y = FLAP;
 }
