@@ -9,8 +9,8 @@ var trebleMapped;
 
 
 //Game variables
-var GRAVITY = .3;
-var FLAP = -7;
+var GRAVITY = .4;
+var FLAP = -9;
 var GROUND_Y;
 var MIN_OPENING = 300;
 var warrior, ground;
@@ -108,6 +108,9 @@ function draw()
             dead();
         }
 
+        if(lifePoints == 0){
+            dead();
+        }
                 warrior.collide(ground)
         
     }
@@ -122,7 +125,7 @@ function draw()
 
             //The Y position is mapped for the bass for now
             var groundH = random(20, 160);
-            var coin = createSprite(warrior.position.x+width/2, lowMidMapped, 30, 30);
+            var coin = createSprite(warrior.position.x+width/2, lowMidMapped*random(6,7), 30, 30);
             coin.addImage(coinImg);
             coin.setCollider("circle");
             coin.debug = true;
@@ -134,15 +137,16 @@ function draw()
       if(midMapped < 50){
           
           groundLevel();
-          
+          groundRemove();
           
           
       }
       else if(midMapped > 50){
           
           
-            holeLevel();
+            
             drawHole();
+          holeRemover();
         
           
       }
@@ -177,7 +181,14 @@ function draw()
             }
         }  
     }
-
+for(var j = 0; j < enemies.length; j++){
+    for(var i = 0; i < holes.length; i++){
+        
+            if(enemies[j].collide(holes[i])){
+                enemies[j].velocity.x *= -1;
+            }
+        }
+    }
 
     //Centering camera position
     camera.position.x = warrior.position.x + width/4;
@@ -206,6 +217,7 @@ function draw()
 
 function groundLevel(){
 
+    //Drawing ground continuosly with double sprites to counter the "frame gap".
     var ground_second = createSprite(camera.position.x+width/2, GROUND_Y, 100, 200);
     var ground_second_plus = createSprite(ground_second.position.x+100, GROUND_Y, 100, 200);
     ground_second.addImage(ground_secondImg);
@@ -217,13 +229,15 @@ function groundLevel(){
     grounds.push(ground_second);
     grounds.push(ground_second_plus);
     
-    var shroom = createSprite(camera.position.x+width/2+random(50, 150), GROUND_Y-130, 50, 60);
+    //Creating mushrooms
+    var shroom = createSprite(camera.position.x+width/2+random(10, 100), GROUND_Y-130, 50, 60);
     shroom.setCollider("circle")
     shroom.addImage(shroomImg);
     shroom.debug = true;
     shrooms.push(shroom);
 
-    var small_enemy = createSprite(shroom.position.x+random(40, 50), GROUND_Y-110, 50, 50);
+    //Creating ground enemies
+    var small_enemy = createSprite(shroom.position.x+random(10, 20), GROUND_Y-125, 50, 50);
     small_enemy.addImage(enemy_smallImg);
     small_enemy.velocity.x = 1;
     small_enemy.setCollider("circle", 0, 0, 20, 20)
@@ -232,6 +246,10 @@ function groundLevel(){
 }
 
 function groundRemove(){
+    
+    //Function to remove all the passed sprites from respective arrays
+    ////
+    
     for(var i = 0; i < grounds.length; i++){
               if(grounds[i].position.x < warrior.position.x-width/2){
                   grounds[i].remove();
@@ -251,28 +269,42 @@ function groundRemove(){
     }
 }
 function drawHole(){
-    var hole = createSprite(camera.position.x+width/2, GROUND_Y, 100, 200);
-    var hole_second = createSprite(hole.position.x +100, GROUND_Y, 100, 200);
+    
+    //Creating the "holes" again with double sprites
+    var hole = createSprite(camera.position.x+width/2, GROUND_Y, 100, 210);
+    var hole_second = createSprite(hole.position.x +100, GROUND_Y, 100, 210);
     hole.addImage(holeImg);
     hole_second.addImage(holeImg);
-    hole.setCollider("rectangle");
-    hole_second.setCollider("rectangle");
+    hole.setCollider("rectangle", 0, 0, 75, 210);
+    hole_second.setCollider("rectangle", 0, 0, 75, 210);
     hole.debug = true;
     hole_second.debug = true;
     holes.push(hole);
     holes.push(hole_second);
     
-}
-
-
-function holeLevel(){
-    
-    
-    var platform = createSprite(camera.position.x+width/2, lowMidMapped*random(3,5)+50, 99, 23);
+    //Creating platforms
+     var platform = createSprite(camera.position.x+width/2, lowMidMapped*random(7,8)+50, 99, 23);
     platform.addImage(platformImg);
     platform.debug = true;
     platform.setCollider("rectangle");
     platforms.push(platform);
+}
+
+
+function holeRemover(){
+    for(var i = 0; i < holes.length; i++){
+              if(holes[i].position.x < warrior.position.x-width/2){
+                  holes[i].remove();
+              }
+          }
+    
+    for(var j = 0; j < platforms.length; j++){
+       if(platforms[j].position.x < warrior.position.x-width/2){
+                  platforms[j].remove();
+              }
+    }
+    
+   
     
 }
 
@@ -313,10 +345,12 @@ function drawingSprites(){
     drawSprite(warrior);
     
     drawSprites(platforms);
-    drawSprites(enemies);
-    drawSprites(shrooms);
+    
+    
     drawSprites(holes);
     drawSprites(grounds);
+    drawSprites(shrooms);
+    drawSprites(enemies);
 
 }
 
