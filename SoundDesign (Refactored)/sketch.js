@@ -353,6 +353,11 @@ function holeRemover(){
     }
 
 
+    for(var k = 0; k < big_enemies.length; k++){
+        if(big_enemies[k].position.x < warrior.position.x-width/2){
+            big_enemies[k].remove();
+        }
+    }
 
 }
 
