@@ -10,20 +10,23 @@ var trebleMapped;
 
 //Game variables
 var GRAVITY = .4;
-var FLAP = -9;
+var JUMP = -7;
 var GROUND_Y;
 var MIN_OPENING = 300;
 var warrior, ground;
 var coins;
-var platforms, enemies, shrooms, grounds;
+var platforms, enemies, shrooms, grounds, comets;
 var gameOver;
 var warriorImg, groundImg, ground_secondImg, coinImg, holeImg;
 var score = 0;
-var enemy_smallImg, shroomImg;
+var enemy_smallImg, shroomImg, enemy_bigImg, comet_smallImg;
 
 var lifePoints;
 var damaged;
+var isJumping;
+var isFalling;
 
+var startGrounds;
 
 function setup()
 {
@@ -35,32 +38,46 @@ function setup()
 
     //Preloading images for sprites
     warriorImg = loadImage("sprites/char_sprite.png");
+
     groundImg = loadImage("sprites/pix_ground.png");
-    ground_secondImg = loadImage("sprites/pixil-frame-0.png")
+    ground_secondImg = loadImage("sprites/ground_sprite.png")
+
     coinImg = loadImage("sprites/coin_sprite.png");
+
     backgroundImg = loadImage("sprites/background_img.png");
+
     platformImg = loadImage("sprites/platform_sprite.png");
+
     enemy_smallImg = loadImage("sprites/enemy_sprite.png");
+    enemy_bigImg = loadImage("sprites/big_enemy.png");
+
     shroomImg = loadImage("sprites/shroom_sprite.png");
+
     holeImg = loadImage("sprites/hole_img.png");
     hole_second_Img = loadImage("sprites/hole_img_two.png");
+
+    comet_smallImg = loadImage("sprites/comet_sprite.png")
 
     GROUND_Y = height - 100;
 
     //Creating warrior sprite
     warrior = createSprite(width/2, GROUND_Y -130, 47, 55);
-    
-    warrior.setCollider("rectangle");
+
+    warrior.setCollider("rectangle", 0, 0, 47, 55);
     warrior.addImage(warriorImg);
     warrior.debug = true;
 
 
     //Creating ground sprite
-    ground = createSprite(width/2, GROUND_Y);
-    ground.addImage(groundImg);
-    ground.width = width/4+115;
+    startGrounds = new Group();
+    for(var i = 0; i <25; i++){
+    ground = createSprite(100*i, GROUND_Y);
+    ground.addImage(ground_secondImg);
+    //    ground.width = width/4+115;
     ground.setCollider("rectangle", 0, 0, 2600, 200)
     ground.debug = true;
+    startGrounds.push(ground);
+    }
 
 
     lifePoints = 50;
@@ -69,13 +86,19 @@ function setup()
     coins = new Group();
     grounds = new Group();
     platforms = new Group();
+
     enemies = new Group();
+    big_enemies = new Group();
+
     shrooms = new Group();
     holes = new Group();
     grounds = new Group();
+    comets = new Group();
 
     damaged = false;
     gameOver = true;
+    isJumping = false;
+    isFalling = false;
     updateSprites(false);
 
     camera.position.y = height/2;
@@ -94,16 +117,23 @@ function draw()
 
     if(!gameOver) {
 
-        if(keyWentDown("x"))
-            warrior.velocity.y = FLAP;
-        //           
+        if(isJumping)
+        {
+            warrior.velocity.y = JUMP;
+        }
+        else if(isFalling)
+        {
 
-        warrior.velocity.y += GRAVITY;
+            warrior.velocity.y += GRAVITY;
+        }
+
+
+
 
         if(warrior.position.y<0){
             warrior.position.y = 0;
         }
-        
+
         if(warrior.position.y > height){
             dead();
         }
@@ -111,48 +141,45 @@ function draw()
         if(lifePoints == 0){
             dead();
         }
-                warrior.collide(ground)
-        
-    }
+        warrior.collide(ground)
+
+        var coll = warrior.collide(ground)
+        //        console.log(warrior.position.y)
+        //        console.log(warrior.position.x)
+        }
 
 
     //Only draws coins if the music is playing
     if(isPlaying){
 
-        
+
         //Framecount needed to space them out evenly. For now
         if(frameCount%60 == 0){
 
             //The Y position is mapped for the bass for now
             var groundH = random(20, 160);
-            var coin = createSprite(warrior.position.x+width/2, lowMidMapped*random(6,7), 30, 30);
+            var coin = createSprite(camera.position.x+width/2, lowMidMapped*random(6,7), 30, 30);
             coin.addImage(coinImg);
             coin.setCollider("circle");
             coin.debug = true;
             coins.push(coin);
-//            console.log(midMapped)
-            
-        
-            
-      if(midMapped < 50){
-          
-          groundLevel();
-          groundRemove();
-          
-          
-      }
-      else if(midMapped > 50){
-          
-          
-            
-            drawHole();
-          holeRemover();
-        
-          
-      }
+            //                        console.log(midMapped)
+            if(midMapped < 50){
+
+                groundLevel();
+                groundRemove();
+            }
+            else if(midMapped > 50){
+                drawHole();
+                holeRemover();
+            }
+            if(midMapped > 55){
+                cometFall();
+
+            }
         }
-        
-    
+
+
     }
 
     //Collecting the coins
@@ -166,12 +193,17 @@ function draw()
 
     //Platform-warrior and warrior-shroom collision
     warrior.collide(platforms);
-    //    warrior.collide(shrooms);
 
     //Warrior and enemy collision + life lost
     warrior.overlap(enemies, lifeDamage);
 
+    warrior.collide(comets, cometHit);
+    grounds.collide(comets, cometCrash);
+    platforms.collide(comets, cometCrash);
+
     warrior.collide(grounds);
+
+
     //Enemies movement
     //Between two shrooms. If they collide the speed changes by *-1;
     for(var i = 0; i < enemies.length; i++){
@@ -181,11 +213,19 @@ function draw()
             }
         }  
     }
-for(var j = 0; j < enemies.length; j++){
-    for(var i = 0; i < holes.length; i++){
-        
+    for(var j = 0; j < enemies.length; j++){
+        for(var i = 0; i < holes.length; i++){
+
             if(enemies[j].collide(holes[i])){
                 enemies[j].velocity.x *= -1;
+            }
+        }
+    }
+
+    for(var i = 0; i < big_enemies.length; i++){
+        for(var j = 0; j < platforms.length; j++){
+            if(big_enemies[i].position.x >= platforms[j].position.x + 40 || big_enemies[i].position.x <= platforms[j].position.x - 40 ){
+                big_enemies[i].velocity.x *= -1;
             }
         }
     }
@@ -194,9 +234,9 @@ for(var j = 0; j < enemies.length; j++){
     camera.position.x = warrior.position.x + width/4;
 
     //Wrapping ground
-//    if(camera.position.x > ground.position.x-ground.width+width/2){
-//        ground.position.x+=ground.width;
-//    }
+    //    if(camera.position.x > ground.position.x-ground.width+width/2){
+    //        ground.position.x+=ground.width;
+    //    }
 
     //Drawing background and background Image aswell
     background(200); 
@@ -228,7 +268,7 @@ function groundLevel(){
     ground_second_plus.debug = true;
     grounds.push(ground_second);
     grounds.push(ground_second_plus);
-    
+
     //Creating mushrooms
     var shroom = createSprite(camera.position.x+width/2+random(10, 100), GROUND_Y-130, 50, 60);
     shroom.setCollider("circle")
@@ -240,36 +280,36 @@ function groundLevel(){
     var small_enemy = createSprite(shroom.position.x+random(10, 20), GROUND_Y-125, 50, 50);
     small_enemy.addImage(enemy_smallImg);
     small_enemy.velocity.x = 1;
-    small_enemy.setCollider("circle", 0, 0, 20, 20)
+    small_enemy.setCollider("circle", 0, 0, 20)
     small_enemy.debug = true;
     enemies.push(small_enemy);
 }
 
 function groundRemove(){
-    
+
     //Function to remove all the passed sprites from respective arrays
     ////
-    
+
     for(var i = 0; i < grounds.length; i++){
-              if(grounds[i].position.x < warrior.position.x-width/2){
-                  grounds[i].remove();
-              }
-          }
-    
-    for(var j = 0; j < shrooms.length; j++){
-       if(shrooms[j].position.x < warrior.position.x-width/2){
-                  shrooms[j].remove();
-              }
+        if(grounds[i].position.x < warrior.position.x-width/2){
+            grounds[i].remove();
+        }
     }
-    
+
+    for(var j = 0; j < shrooms.length; j++){
+        if(shrooms[j].position.x < warrior.position.x-width/2){
+            shrooms[j].remove();
+        }
+    }
+
     for(var k = 0; k < enemies.length; k++){
-       if(enemies[k].position.x < warrior.position.x-width/2){
-                  enemies[k].remove();
-              }
+        if(enemies[k].position.x < warrior.position.x-width/2){
+            enemies[k].remove();
+        }
     }
 }
 function drawHole(){
-    
+
     //Creating the "holes" again with double sprites
     var hole = createSprite(camera.position.x+width/2, GROUND_Y, 100, 210);
     var hole_second = createSprite(hole.position.x +100, GROUND_Y, 100, 210);
@@ -281,31 +321,49 @@ function drawHole(){
     hole_second.debug = true;
     holes.push(hole);
     holes.push(hole_second);
-    
+
     //Creating platforms
-     var platform = createSprite(camera.position.x+width/2, lowMidMapped*random(7,8)+50, 99, 23);
+    var platform = createSprite(camera.position.x+width/2, lowMidMapped*random(7,8)+50, 99, 23);
     platform.addImage(platformImg);
     platform.debug = true;
     platform.setCollider("rectangle");
     platforms.push(platform);
+
+    //Creating bigger enemies on platforms
+    var big_enemy = createSprite(platform.position.x, platform.position.y -25, 50, 50);
+    big_enemy.addImage(enemy_bigImg);
+    big_enemy.velocity.x = 1;
+    big_enemy.setCollider("circle", 0, 0, 20)
+    big_enemy.debug = true;
+    big_enemies.push(big_enemy);
 }
 
 
 function holeRemover(){
     for(var i = 0; i < holes.length; i++){
-              if(holes[i].position.x < warrior.position.x-width/2){
-                  holes[i].remove();
-              }
-          }
-    
-    for(var j = 0; j < platforms.length; j++){
-       if(platforms[j].position.x < warrior.position.x-width/2){
-                  platforms[j].remove();
-              }
+        if(holes[i].position.x < warrior.position.x-width/2){
+            holes[i].remove();
+        }
     }
-    
-   
-    
+
+    for(var j = 0; j < platforms.length; j++){
+        if(platforms[j].position.x < warrior.position.x-width/2){
+            platforms[j].remove();
+        }
+    }
+
+
+
+}
+
+function cometFall(){
+    var comet_small = createSprite(warrior.position.x+random(100, width/2), random(100, 200), 50, 50)
+    comet_small.addImage(comet_smallImg);
+    comet_small.setCollider("circle");
+    comet_small.velocity.x = -1;
+    comet_small.velocity.y = 2;
+    comet_small.debug = true;
+    comets.push(comet_small);
 }
 
 function collect(collector, collected){
@@ -333,25 +391,38 @@ function lifeDamage(character, enemy){
     }
 
 }
+
+function cometHit(character, comet){
+    comet.remove();
+    lifePoints -= 20;
+}
+
+function cometCrash(object, comet){
+    comet.remove();
+}
+
 function dead(){
     updateSprites(false);
     gameOver = true;
     isPlaying = false;
 }
+
+
 function drawingSprites(){
 
     drawSprites(coins);
-    drawSprite(ground);
-    drawSprite(warrior);
-    
+
+
     drawSprites(platforms);
-    
-    
+    drawSprites(big_enemies);
+
     drawSprites(holes);
     drawSprites(grounds);
     drawSprites(shrooms);
     drawSprites(enemies);
-
+    drawSprites(comets);
+    drawSprites(startGrounds);
+    drawSprite(warrior);
 }
 
 function newGame() {
@@ -362,12 +433,22 @@ function newGame() {
     warrior.position.y = GROUND_Y - 130;
     warrior.velocity.y = 0;
     warrior.velocity.x = 3;
-    ground.position.x = width/2;
+//    ground.position.x = width/2;
     ground.position.y = GROUND_Y;
 }
 
-function mousePressed() {
-//    if(gameOver)
-//        newGame();
-    //      warrior.velocity.y = FLAP;
-}
+function keyPressed(){
+    if(key == 'X'){
+        isJumping = true;
+    }
+    }
+
+function keyReleased()
+        {
+            if(key == 'X'){
+                isJumping = false;
+                isFalling = true;
+            }
+
+        }
+
