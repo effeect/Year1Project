@@ -65,7 +65,7 @@ function setup()
 
     warrior.setCollider("rectangle", 0, 0, 47, 55);
     warrior.addImage(warriorImg);
-    warrior.debug = true;
+//    warrior.debug = true;
 
 
     //Creating ground sprite
@@ -75,7 +75,7 @@ function setup()
     ground.addImage(ground_secondImg);
     //    ground.width = width/4+115;
     ground.setCollider("rectangle", 0, 0, 2600, 200)
-    ground.debug = true;
+//    ground.debug = true;
     startGrounds.push(ground);
     }
 
@@ -141,11 +141,7 @@ function draw()
         if(lifePoints == 0){
             dead();
         }
-        warrior.collide(ground)
-
-        var coll = warrior.collide(ground)
-        //        console.log(warrior.position.y)
-        //        console.log(warrior.position.x)
+        
         }
 
 
@@ -161,7 +157,7 @@ function draw()
             var coin = createSprite(camera.position.x+width/2, lowMidMapped*random(6,7), 30, 30);
             coin.addImage(coinImg);
             coin.setCollider("circle");
-            coin.debug = true;
+//            coin.debug = true;
             coins.push(coin);
             //                        console.log(midMapped)
             if(midMapped < 50){
@@ -203,6 +199,7 @@ function draw()
 
     warrior.collide(grounds);
 
+    warrior.collide(startGrounds);
 
     //Enemies movement
     //Between two shrooms. If they collide the speed changes by *-1;
@@ -224,7 +221,7 @@ function draw()
 
     for(var i = 0; i < big_enemies.length; i++){
         for(var j = 0; j < platforms.length; j++){
-            if(big_enemies[i].position.x >= platforms[j].position.x + 40 || big_enemies[i].position.x <= platforms[j].position.x - 40 ){
+            if(big_enemies[i].position.x > platforms[j].position.x + 30 || big_enemies[i].position.x < platforms[j].position.x - 30 ){
                 big_enemies[i].velocity.x *= -1;
             }
         }
@@ -264,8 +261,8 @@ function groundLevel(){
     ground_second_plus.addImage(ground_secondImg);
     ground_second.setCollider("rectangle");
     ground_second_plus.setCollider("rectangle");
-    ground_second.debug = true;
-    ground_second_plus.debug = true;
+//    ground_second.debug = true;
+//    ground_second_plus.debug = true;
     grounds.push(ground_second);
     grounds.push(ground_second_plus);
 
@@ -273,15 +270,15 @@ function groundLevel(){
     var shroom = createSprite(camera.position.x+width/2+random(10, 100), GROUND_Y-130, 50, 60);
     shroom.setCollider("circle")
     shroom.addImage(shroomImg);
-    shroom.debug = true;
+//    shroom.debug = true;
     shrooms.push(shroom);
 
     //Creating ground enemies
-    var small_enemy = createSprite(shroom.position.x+random(10, 20), GROUND_Y-125, 50, 50);
+    var small_enemy = createSprite(shroom.position.x+random(10, 15), GROUND_Y-125, 50, 50);
     small_enemy.addImage(enemy_smallImg);
     small_enemy.velocity.x = 1;
     small_enemy.setCollider("circle", 0, 0, 20)
-    small_enemy.debug = true;
+//    small_enemy.debug = true;
     enemies.push(small_enemy);
 }
 
@@ -317,7 +314,7 @@ function drawHole(){
     hole_second.addImage(holeImg);
     hole.setCollider("rectangle", 0, 0, 75, 210);
     hole_second.setCollider("rectangle", 0, 0, 75, 210);
-    hole.debug = true;
+//    hole.debug = true;
     hole_second.debug = true;
     holes.push(hole);
     holes.push(hole_second);
@@ -325,7 +322,7 @@ function drawHole(){
     //Creating platforms
     var platform = createSprite(camera.position.x+width/2, lowMidMapped*random(7,8)+50, 99, 23);
     platform.addImage(platformImg);
-    platform.debug = true;
+//    platform.debug = true;
     platform.setCollider("rectangle");
     platforms.push(platform);
 
@@ -334,7 +331,7 @@ function drawHole(){
     big_enemy.addImage(enemy_bigImg);
     big_enemy.velocity.x = 1;
     big_enemy.setCollider("circle", 0, 0, 20)
-    big_enemy.debug = true;
+//    big_enemy.debug = true;
     big_enemies.push(big_enemy);
 }
 
@@ -367,7 +364,7 @@ function cometFall(){
     comet_small.setCollider("circle");
     comet_small.velocity.x = -1;
     comet_small.velocity.y = 2;
-    comet_small.debug = true;
+//    comet_small.debug = true;
     comets.push(comet_small);
 }
 
