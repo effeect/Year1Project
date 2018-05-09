@@ -1,20 +1,17 @@
-# Documentation for Sound Based Platformer
-Welcome to our Github page for our
+# The song game
+Welcome to the offical GitHub page for the song game, a game which showcases the power of what music can do when mixed in with p5 art plus a game. Both elements can be reused and implemented under the Creative Commons 4.0 License. You can read more about the conditions here : https://creativecommons.org/licenses/by/4.0/
+
+Image here 
+
+# Useful Links :
+- Documentation (Wiki) : 
+- Link to Hosted version
+- Video Documentation : Youtube 
+
 # What is it ?
-Sound Based Platformer (Need a better name) is a platformer powered by the music files you can input into the program. It’s a P5JS based program with the additional libraries, P5.dom, P5.play and P5.sound. With all these elements together, you can input any music file (MP3, WAV or FLAC) and play a level that reacts to the elements of the songs. We've seperated the core javascript files so you can use the sound engine for any other projects!
+The Song game is a platformer powered by the music files you can input into the program. It’s a P5JS based program with the additional libraries, P5.dom, P5.play and P5.sound. With all these elements together, you can input any music file (MP3, WAV or FLAC) and play a level that reacts to the elements of the songs. We've seperated the core javascript files so you can use the sound engine for any other projects!
 
-List of things to add
-Project description. 
 
-Documentation on the intended audience / intended outcomes / background research. 
-Documentation of your creative process, aesthetic choices - the thought behind your decisions. 
-A link to or documentation of your code.
-A link to video documentation.
-Links to clearly labelled executables (where appropriate). 
-A commentary on your build including problems you encountered and how you solved them. 
-An evaluation of your project. (i.e. How successful it was and how you know this.) 
-Appropriate references and bibliography.
-Ideally your pdf will include attractive content such as screen shots and video footage. 
-
+**Written and Developed by Tamas Kiss and Oliver Dimes**
 
 
