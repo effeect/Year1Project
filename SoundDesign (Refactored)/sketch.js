@@ -39,7 +39,7 @@ function setup()
     //Preloading images for sprites
     warriorImg = loadImage("sprites/char_sprite.png");
 
-    groundImg = loadImage("sprites/pix_ground.png");
+    
     ground_secondImg = loadImage("sprites/ground_sprite.png")
 
     coinImg = loadImage("sprites/coin_sprite.png");
