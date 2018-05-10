@@ -137,7 +137,7 @@ function draw()
             dead();
         }
 
-        if(lifePoints == 0){
+        if(lifePoints <= 0){
             dead();
         }
         
@@ -232,18 +232,19 @@ function draw()
     camera.position.x = warrior.position.x + width/4;
 
     //Drawing background and background Image aswell
-    background(200); 
-    camera.off();
-    image(backgroundImg, 0, GROUND_Y-(height-100), width, height-100);
-    camera.on();
+//    background(200); 
+//    camera.off();
+//    image(backgroundImg, 0, GROUND_Y-(height-100), width, height-100);
+//    camera.on();
 
     //Game score and life points
+    background(255)
     textSize(20);
     textStyle(BOLD);
     stroke(0)
     fill(255)
-    text('Game score: ' + score, warrior.position.x - width/5, 100);
-    text('Life Points: ' + lifePoints, warrior.position.x - width/5, 130);
+    text('Game score: ' + score, warrior.position.x, 100);
+    text('Life Points: ' + lifePoints, warrior.position.x, 130);
 
 
     //Drawing sprites
@@ -310,10 +311,10 @@ function drawHole(){
     var hole_second = createSprite(hole.position.x +100, GROUND_Y, 100, 210);
     hole.addImage(holeImg);
     hole_second.addImage(holeImg);
-    hole.setCollider("rectangle", 0, 0, 75, 210);
-    hole_second.setCollider("rectangle", 0, 0, 75, 210);
+    hole.setCollider("rectangle", 0, 0, 75, 205);
+    hole_second.setCollider("rectangle", 0, 0, 75, 205);
 //    hole.debug = true;
-    hole_second.debug = true;
+//    hole_second.debug = true;
     holes.push(hole);
     holes.push(hole_second);
 
