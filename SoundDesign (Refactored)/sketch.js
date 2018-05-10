@@ -243,10 +243,12 @@ function draw()
     camera.on();
 
     //Game score and life points
-    textSize(14);
+    textSize(20);
     textStyle(BOLD);
-    text('Game score: ' + score, warrior.position.x +200, 100);
-    text('Life Points: ' + lifePoints, warrior.position.x +200, 200);
+    stroke(0)
+    fill(255)
+    text('Game score: ' + score, warrior.position.x - width/5, 100);
+    text('Life Points: ' + lifePoints, warrior.position.x - width/5, 130);
 
 
     //Drawing sprites
