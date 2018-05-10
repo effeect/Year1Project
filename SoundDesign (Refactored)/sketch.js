@@ -7,6 +7,7 @@ var midMapped;
 var highMidMapped;
 var trebleMapped;
 
+var frameBuffer = 0; 
 
 //Game variables
 var GRAVITY = .4;
@@ -104,10 +105,19 @@ function setup()
 }
 
 function draw()
-{
-
+{   
+    frameBuffer++
+    if(frameBuffer > 60)
+        {
+            frameBuffer = 0
+        }
+    if(frameBuffer == 10 || frameBuffer == 20 || frameBuffer == 30 || frameBuffer == 40 || frameBuffer == 50 || frameBuffer == 60 || frameBuffer == 5 || frameBuffer == 15 || frameBuffer == 25 || frameBuffer == 35 || frameBuffer == 45 || frameBuffer == 55)
+        {
+            soundDraw()
+        }
 //    var frame = frameRate();
-    soundDraw() //This is the draw function inside the soundDesign.js function.
+    
+//    soundDraw() //This is the draw function inside the soundDesign.js function.
     //    background(bassMapped,0,0)
     //    ellipse(500,500,bassMapped * 4, bassMapped * 4)
 
