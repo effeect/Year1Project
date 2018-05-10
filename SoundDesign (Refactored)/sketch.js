@@ -21,7 +21,8 @@ var gameOver;
 var warriorImg, groundImg, ground_secondImg, coinImg, holeImg;
 var score = 0;
 var enemy_smallImg, shroomImg, enemy_bigImg, comet_smallImg;
-
+var shootImg;
+var shoots;
 var lifePoints;
 var damaged;
 var isJumping;
@@ -57,7 +58,8 @@ function setup()
     holeImg = loadImage("sprites/hole_img.png");
     hole_second_Img = loadImage("sprites/hole_img_two.png");
 
-    comet_smallImg = loadImage("sprites/comet_sprite.png")
+    comet_smallImg = loadImage("sprites/comet_sprite.png");
+    shootImg = loadImage("sprites/shoot_sprite.png");
 
     //Variable used for ground close sprites.
     GROUND_Y = height - 100;
@@ -94,6 +96,8 @@ function setup()
     holes = new Group();
     grounds = new Group();
     comets = new Group();
+    
+    shoots = new Group();
 
     damaged = false;
     gameOver = true;
@@ -138,6 +142,8 @@ function draw()
             warrior.velocity.y += GRAVITY;
             console.log(warrior.velocity.y)
         }
+        
+        
 
         //To not let the character go off screen on top.
         if(warrior.position.y<0){
@@ -210,6 +216,9 @@ function draw()
     warrior.collide(grounds, hitGround);
 
     warrior.collide(startGrounds, hitGround);
+    
+    
+    shoots.overlap(enemies, enemyKill);
 
     //Enemies movement
     //Between two shrooms. If they collide the speed changes by *-1;
@@ -258,8 +267,11 @@ function draw()
     fill(220)
     text('Game score: ' + score, warrior.position.x, 100);
     text('Life Points: ' + lifePoints, warrior.position.x, 130);
+    
+    textStyle(ITALIC);
+    text('Jump - x, shoot - mousePress', warrior.position.x - 400, 50);
 
-    text(frameCount%60, warrior.position.x, 300)
+    
 
     //Drawing sprites
     drawingSprites();
@@ -424,9 +436,25 @@ function cometCrash(object, comet){
     comet.remove();
 }
 
+
 function hitGround(character, ground){
     isFalling = false;
 }
+
+function shooting(){
+    
+        var shoot = createSprite(warrior.position.x+20, warrior.position.y, 10, 10);
+        shoot.addImage(shootImg);
+        shoot.setCollider("circle");
+        shoot.velocity.x = 4;
+        shoots.push(shoot);
+}
+
+function enemyKill(shoot, enemy){
+    shoot.remove();
+    enemy.remove();
+}
+
 function dead(){
     //If dead, sprites stop updating gameOver is true.
     updateSprites(false);
@@ -447,6 +475,7 @@ function drawingSprites(){
     drawSprites(enemies);
     drawSprites(comets);
     drawSprites(startGrounds);
+    drawSprites(shoots);
     drawSprite(warrior);
 }
 
@@ -463,6 +492,13 @@ function newGame() {
     ground.position.y = GROUND_Y;
 }
 
+function mousePressed(){
+    if(score >= 10 && isPlaying){
+        shooting();
+        score -= 10;
+        
+    }
+}
 function keyPressed(){
     if(key == 'X'){
         isJumping = true;
