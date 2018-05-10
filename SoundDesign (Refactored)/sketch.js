@@ -58,11 +58,11 @@ function setup()
 
     comet_smallImg = loadImage("sprites/comet_sprite.png")
 
+    //Variable used for ground close sprites.
     GROUND_Y = height - 100;
 
     //Creating warrior sprite
     warrior = createSprite(width/2, GROUND_Y -130, 47, 55);
-
     warrior.setCollider("rectangle", 0, 0, 47, 55);
     warrior.addImage(warriorImg);
 //    warrior.debug = true;
@@ -73,7 +73,6 @@ function setup()
     for(var i = 0; i <25; i++){
     ground = createSprite(100*i, GROUND_Y);
     ground.addImage(ground_secondImg);
-    //    ground.width = width/4+115;
     ground.setCollider("rectangle", 0, 0, 2600, 200)
 //    ground.debug = true;
     startGrounds.push(ground);
@@ -117,6 +116,7 @@ function draw()
 
     if(!gameOver) {
 
+        //Jumping and falling.
         if(isJumping)
         {
             warrior.velocity.y = JUMP;
@@ -127,13 +127,12 @@ function draw()
             warrior.velocity.y += GRAVITY;
         }
 
-
-
-
+        //To not let the character go off screen on top.
         if(warrior.position.y<0){
             warrior.position.y = 0;
         }
 
+        //Game over conditions.
         if(warrior.position.y > height){
             dead();
         }
@@ -157,9 +156,7 @@ function draw()
             var coin = createSprite(camera.position.x+width/2, lowMidMapped*random(6,7), 30, 30);
             coin.addImage(coinImg);
             coin.setCollider("circle");
-//            coin.debug = true;
             coins.push(coin);
-            //                        console.log(midMapped)
             if(midMapped < 50){
 
                 groundLevel();
@@ -211,6 +208,8 @@ function draw()
             }
         }  
     }
+    
+    //Enemies turning back at the edge of ground.
     for(var j = 0; j < enemies.length; j++){
         for(var i = 0; i < holes.length; i++){
 
@@ -220,6 +219,7 @@ function draw()
         }
     }
 
+    //Big_enemies moving along the platforms
     for(var i = 0; i < big_enemies.length; i++){
         for(var j = 0; j < platforms.length; j++){
             if(big_enemies[i].position.x > platforms[j].position.x + 30 || big_enemies[i].position.x < platforms[j].position.x - 30 ){
@@ -230,11 +230,6 @@ function draw()
 
     //Centering camera position
     camera.position.x = warrior.position.x + width/4;
-
-    //Wrapping ground
-    //    if(camera.position.x > ground.position.x-ground.width+width/2){
-    //        ground.position.x+=ground.width;
-    //    }
 
     //Drawing background and background Image aswell
     background(200); 
@@ -255,7 +250,7 @@ function draw()
 
 function groundLevel(){
 
-    //Drawing ground continuosly with double sprites to counter the "frame gap".
+    //Drawing ground continuosly with double sprites to counter the "frame gap" which occurs because the sprites only drawn at every 60 frameCount.
     var ground_second = createSprite(camera.position.x+width/2, GROUND_Y, 100, 200);
     var ground_second_plus = createSprite(ground_second.position.x+100, GROUND_Y, 100, 200);
     ground_second.addImage(ground_secondImg);
@@ -338,6 +333,8 @@ function drawHole(){
 
 
 function holeRemover(){
+    
+    //Removes everything from their respective group arrays after passing out of sight.
     for(var i = 0; i < holes.length; i++){
         if(holes[i].position.x < warrior.position.x-width/2){
             holes[i].remove();
@@ -360,7 +357,9 @@ function holeRemover(){
 }
 
 function cometFall(){
-    var comet_small = createSprite(warrior.position.x+random(100, width/2), random(100, 200), 50, 50)
+    
+    //Comets falling from the sky for bit more challange damaging the character.
+    var comet_small = createSprite(warrior.position.x+random(250, width/2), random(100, 200), 50, 50)
     comet_small.addImage(comet_smallImg);
     comet_small.setCollider("circle");
     comet_small.velocity.x = -1;
@@ -370,6 +369,8 @@ function cometFall(){
 }
 
 function collect(collector, collected){
+    
+    //Coin collection function, explained where the function is called.
     collected.remove();
     score += 10;
 }
@@ -396,15 +397,18 @@ function lifeDamage(character, enemy){
 }
 
 function cometHit(character, comet){
+    //When hitting the character it damages it and removes itself.
     comet.remove();
     lifePoints -= 20;
 }
 
 function cometCrash(object, comet){
+    //Hitting the ground the comet removes itself.
     comet.remove();
 }
 
 function dead(){
+    //If dead, sprites stop updating gameOver is true.
     updateSprites(false);
     gameOver = true;
     isPlaying = false;
@@ -413,12 +417,10 @@ function dead(){
 
 function drawingSprites(){
 
+    //Drawing sprite groups and individual sprites.
     drawSprites(coins);
-
-
     drawSprites(platforms);
     drawSprites(big_enemies);
-
     drawSprites(holes);
     drawSprites(grounds);
     drawSprites(shrooms);
@@ -430,6 +432,7 @@ function drawingSprites(){
 
 function newGame() {
 
+    //When newGame everyting resets.
     gameOver = false;
     updateSprites(true);
     warrior.position.x = width/2;
