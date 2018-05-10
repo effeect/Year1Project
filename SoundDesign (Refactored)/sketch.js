@@ -240,7 +240,8 @@ function draw()
 //    camera.on();
 
     //Game score and life points
-    background(bassMapped * 2 + 100,255,255)
+    colorMode(HSB)
+    background(bassMapped + 100,lowMidMapped,trebleMapped) // Mapped Background
     textSize(20);
     textStyle(BOLD);
     stroke(0)
