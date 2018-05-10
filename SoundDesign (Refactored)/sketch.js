@@ -106,6 +106,7 @@ function setup()
 function draw()
 {
 
+//    var frame = frameRate();
     soundDraw() //This is the draw function inside the soundDesign.js function.
     //    background(bassMapped,0,0)
     //    ellipse(500,500,bassMapped * 4, bassMapped * 4)
@@ -246,6 +247,7 @@ function draw()
     text('Game score: ' + score, warrior.position.x, 100);
     text('Life Points: ' + lifePoints, warrior.position.x, 130);
 
+    text(frameCount%60, warrior.position.x, 300)
 
     //Drawing sprites
     drawingSprites();
