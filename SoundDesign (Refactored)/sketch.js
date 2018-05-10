@@ -242,7 +242,7 @@ function draw()
     textSize(20);
     textStyle(BOLD);
     stroke(0)
-    fill(255)
+    fill(220)
     text('Game score: ' + score, warrior.position.x, 100);
     text('Life Points: ' + lifePoints, warrior.position.x, 130);
 
