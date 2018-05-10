@@ -146,6 +146,7 @@ function draw()
         }
 
         if(lifePoints <= 0){
+            lifePoints = lifePoints;
             dead();
         }
         
@@ -259,12 +260,13 @@ function draw()
     text('Life Points: ' + lifePoints, warrior.position.x, 130);
     
     textStyle(ITALIC);
-    text('Jump - x, shoot - mousePress', warrior.position.x - 400, 50);
+    text('Jump - x, shoot - mousePress(cost 20 score point)', warrior.position.x - 400, 50);
 
     
 
     //Drawing sprites
     drawingSprites();
+    
 }
 
 function groundLevel(){
@@ -450,6 +452,8 @@ function dead(){
     updateSprites(false);
     gameOver = true;
     isPlaying = false;
+    
+
 }
 
 
