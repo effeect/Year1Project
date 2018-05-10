@@ -200,6 +200,8 @@ function draw()
     warrior.collide(grounds, hitGround);
 
     warrior.collide(startGrounds, hitGround);
+    
+    warrior.overlap(enemies, stampEnemy);
 
     //Enemies movement
     //Between two shrooms. If they collide the speed changes by *-1;
@@ -413,9 +415,15 @@ function cometCrash(object, comet){
     comet.remove();
 }
 
+
 function hitGround(character, ground){
     isFalling = false;
 }
+
+function stampEnemy(character, enemy){
+    enemy.remove();
+}
+
 function dead(){
     //If dead, sprites stop updating gameOver is true.
     updateSprites(false);
