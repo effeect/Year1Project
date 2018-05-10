@@ -192,6 +192,7 @@ function draw()
 
     //Warrior and enemy collision + life lost
     warrior.overlap(enemies, lifeDamage);
+    warrior.overlap(big_enemies, lifeDamage);
 
     warrior.collide(comets, cometHit);
     grounds.collide(comets, cometCrash);
