@@ -18,7 +18,7 @@ var coins;
 var platforms, enemies, shrooms, grounds, comets;
 var gameOver;
 var warriorImg, groundImg, ground_secondImg, coinImg, holeImg;
-var score = 30;
+var score = 0;
 var enemy_smallImg, shroomImg, enemy_bigImg, comet_smallImg;
 var shootImg;
 var shoots;
@@ -257,8 +257,11 @@ function draw()
     fill(220)
     text('Game score: ' + score, warrior.position.x, 100);
     text('Life Points: ' + lifePoints, warrior.position.x, 130);
+    
+    textStyle(ITALIC);
+    text('Jump - x, shoot - mousePress', warrior.position.x - 400, 50);
 
-    text(frameCount%60, warrior.position.x, 300)
+    
 
     //Drawing sprites
     drawingSprites();
