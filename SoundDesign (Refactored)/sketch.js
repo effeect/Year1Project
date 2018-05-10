@@ -126,6 +126,7 @@ function draw()
         {
 
             warrior.velocity.y += GRAVITY;
+            console.log(warrior.velocity.y)
         }
 
         //To not let the character go off screen on top.
@@ -196,9 +197,9 @@ function draw()
     grounds.collide(comets, cometCrash);
     platforms.collide(comets, cometCrash);
 
-    warrior.collide(grounds);
+    warrior.collide(grounds, hitGround);
 
-    warrior.collide(startGrounds);
+    warrior.collide(startGrounds, hitGround);
 
     //Enemies movement
     //Between two shrooms. If they collide the speed changes by *-1;
@@ -412,6 +413,9 @@ function cometCrash(object, comet){
     comet.remove();
 }
 
+function hitGround(character, ground){
+    isFalling = false;
+}
 function dead(){
     //If dead, sprites stop updating gameOver is true.
     updateSprites(false);
