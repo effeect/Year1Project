@@ -1,11 +1,14 @@
 # The song game
 Welcome to the offical GitHub page for the song game, a game which showcases the power of what music can do when mixed in with p5 art plus a game. Both elements can be reused and implemented under the Creative Commons 4.0 License. You can read more about the conditions here : https://creativecommons.org/licenses/by/4.0/
 
-Image here 
-
 # Useful Links :
 - Documentation (Wiki) : 
-- Link to Hosted version
+   1. [Chapter 1 : Introduction](https://github.com/effeect/Year1Project/wiki/Chapter-1-:-Introduction)
+   2. [Chapter 2 : Audiences and outcomes](https://github.com/effeect/Year1Project/wiki/Chapter-2-:-Intended-audience-and-outcomes)
+   3. [Chapter 3 : soundDesign.js](https://github.com/effeect/Year1Project/wiki/Chapter-3-:-soundDesign.js)
+   4. [Chapter 4 : Game Development](https://github.com/effeect/Year1Project/wiki/Chapter-4-:-Game-Development)
+   5. [Chapter 5 : Evaluation](https://github.com/effeect/Year1Project/wiki/Chapter-5-:-Evaluation)
+- Link to [Hosted version](http://igor.gold.ac.uk/~odime001/CreativeProjectYear1/FinalProduct/)
 - Video Documentation : Youtube 
 
 # What is it ?
