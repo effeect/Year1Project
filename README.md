@@ -19,7 +19,7 @@ If you don't have a windows pc, you can use something like Mozilla Firefox which
    4. [Chapter 4 : Game Development](https://github.com/effeect/Year1Project/wiki/Chapter-4-:-Game-Development)
    5. [Chapter 5 : Evaluation](https://github.com/effeect/Year1Project/wiki/Chapter-5-:-Evaluation)
 - Link to [Hosted version](http://igor.gold.ac.uk/~odime001/CreativeProjectYear1/FinalProduct/)
-- Video Documentation : Youtube 
+- Video Documentation : [Youtube](https://www.youtube.com/watch?v=s3bu6SeYLYI)
 
 
 **Written and Developed by Tamas Kiss and Oliver Dimes**
