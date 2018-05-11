@@ -44,6 +44,7 @@ function handleFile(file) //This function handles the audio transfer from the co
 {
   if (file.type === 'audio')
     {
+        
         console.log("File recieved")
         sound = loadSound(file.data)
         soundRecieved = true;

@@ -139,8 +139,8 @@ function draw()
         else if(isFalling)
         {
 
-            warrior.velocity.y += GRAVITY;
-            console.log(warrior.velocity.y)
+            warrior.velocity.y += GRAVITY; //Gravity Mechanic 
+//            console.log(warrior.velocity.y)
         }
         
         
